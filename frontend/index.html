@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Playground</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Image Playground</h1>
+    <p class="subtitle">Upload an image to detect objects</p>
+  </header>
+
+  <main>
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Upload image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5" width="48" height="48">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12M8 8l4-4 4 4"/>
+      </svg>
+      <p>Drag &amp; drop an image here, or <span class="link">click to browse</span></p>
+      <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden />
+    </div>
+
+    <section id="result-section" hidden>
+      <div id="image-container">
+        <img id="preview" alt="Uploaded image" />
+        <canvas id="overlay"></canvas>
+      </div>
+
+      <div id="results-panel">
+        <h2>Detections <span id="detection-count"></span></h2>
+        <ul id="results-list"></ul>
+      </div>
+    </section>
+
+    <p id="status-msg" aria-live="polite"></p>
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
