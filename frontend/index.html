@@ -9,10 +9,19 @@
 <body>
   <header>
     <h1>Image Playground</h1>
-    <p class="subtitle">Upload an image to detect objects</p>
+    <p class="subtitle">Upload an image and explore computer vision features</p>
   </header>
 
   <main>
+    <div id="feature-tabs" role="tablist" aria-label="Feature">
+      <button role="tab" class="tab active" data-feature="detection" aria-selected="true">
+        Object Detection
+      </button>
+      <button role="tab" class="tab" data-feature="segmentation" aria-selected="false">
+        Segmentation
+      </button>
+    </div>
+
     <div id="drop-zone" role="button" tabindex="0" aria-label="Upload image">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
            stroke="currentColor" stroke-width="1.5" width="48" height="48">
@@ -30,7 +39,7 @@
       </div>
 
       <div id="results-panel">
-        <h2>Detections <span id="detection-count"></span></h2>
+        <h2><span id="results-label">Detections</span> <span id="detection-count"></span></h2>
         <ul id="results-list"></ul>
       </div>
     </section>

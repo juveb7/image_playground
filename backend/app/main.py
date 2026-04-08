@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.routes.object_detection import router as detection_router
+from app.routes.segmentation import router as segmentation_router
 
 # Resolve paths relative to this file so the app works from any working directory
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # repo root
@@ -23,6 +24,7 @@ app = FastAPI(title="Image Playground")
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 app.include_router(detection_router, prefix="/api")
+app.include_router(segmentation_router, prefix="/api")
 
 
 @app.get("/")
