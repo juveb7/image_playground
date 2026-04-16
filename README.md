@@ -1,96 +1,97 @@
-# Image Playground
+# AI Playground
 
-Image Playground is a modular computer vision web app built by Abdoul, Juve, and Gio. The project is designed to help the team learn production-style machine learning engineering, prepare for technical interviews, and grow a portfolio-quality application that can continue expanding over time.
+AI Playground is a modular, multi-modal AI web app built by Abdoul, Juve, and Gio. Users land on a category page, choose a modality (image, video, audio, or text), and interact with AI-powered features entirely in the browser. Under the hood the app combines a static frontend, a FastAPI backend, and pluggable model-inference modules.
 
-Users upload an image in the browser, choose a computer vision feature, and receive visual results such as object detections or segmentation overlays. Under the hood, the app combines a frontend UI, a FastAPI backend, and pluggable model-inference modules.
-
-## Project Vision
-
-This project has three goals:
-
-1. Learn how to build end-to-end ML systems beyond notebooks.
-2. Prepare strong interview stories around architecture, experimentation, and deployment.
-3. Create a reusable foundation for more advanced image intelligence features.
-
-The project is intentionally structured so each new feature can be added as a focused module while the team gains experience with:
-
-- frontend and backend integration
-- API design
-- model inference workflows
-- image preprocessing and validation
-- result visualization
-- clean code organization
-- collaboration in a team repository
+The project is designed to help the team learn production-style machine learning engineering, prepare for technical interviews, and grow a portfolio-quality application that can continue expanding over time.
 
 ## Team
 
-- Abdoul
-- Juve
-- Gio
+- Abdoul — model experimentation, feature implementation, evaluation, technical writeups
+- Juve — backend integration, API contracts, application structure, infrastructure
+- Gio — frontend UX, visualization, user flow, presentation polish
 
-All three contributors are M.S. students in Data Science and AI and are using this project as both a learning platform and a serious portfolio piece.
+All three are M.S. students in Data Science and AI using this project as both a learning platform and a serious portfolio piece.
 
-## Current Scope
+## Live Features
 
-The current app already provides the system structure:
+### Image
 
-- a FastAPI backend
-- a browser-based frontend
-- upload and preview flow
-- feature tabs
-- API routes for object detection and segmentation
-- frontend rendering for boxes and masks
+| Feature | Model | Status |
+|---|---|---|
+| Object Detection | YOLOv8n (`yolo26n.pt`) | ✅ Working |
+| Segmentation | YOLOv8n-seg (`yolov8n-seg.pt`) | ✅ Working |
 
-The main remaining work is implementing the model-backed feature modules and improving the app into a polished interview-ready project.
+### Audio
 
-## Features
+| Feature | Model | Status |
+|---|---|---|
+| Speech-to-Text | Whisper tiny (~39 MB, auto-downloaded) | ✅ Working |
 
-- Object detection
-- Image segmentation
-- Additional CV features planned as the project grows
+### Coming Soon
+
+- **Video** — object tracking, action recognition
+- **Audio** — audio classification
+- **Text** — sentiment analysis, NER, summarization
 
 ## Project Structure
 
-```text
-image_playground/
-├── backend/                  # Python backend (API + ML models)
+```
+ai_playground/
+├── backend/
 │   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py           # App entry point
-│   │   ├── routes/           # API route handlers
-│   │   └── features/         # Image processing features
+│   │   ├── main.py                        # FastAPI app, route registration, static file serving
+│   │   ├── routes/
+│   │   │   ├── object_detection.py        # POST /api/detect
+│   │   │   ├── segmentation.py            # POST /api/segment
+│   │   │   └── audio.py                   # POST /api/transcribe
+│   │   └── features/
 │   │       ├── object_detection/
-│   │       └── segmentation/
+│   │       │   └── detector.py            # detect(image) → list[dict]
+│   │       ├── segmentation/
+│   │       │   └── segmenter.py           # segment(image) → list[dict]
+│   │       └── audio/
+│   │           └── transcriber.py         # transcribe(bytes, filename) → dict
 │   └── requirements.txt
-├── frontend/                 # Web UI
-│   ├── index.html
-│   ├── static/
-│   │   ├── css/
-│   │   └── js/
-│   └── templates/
-└── uploads/                  # Temporary image storage (gitignored)
+├── frontend/
+│   ├── landing.html                       # Category picker (/, home page)
+│   ├── image.html                         # Image feature page (/image)
+│   ├── audio.html                         # Audio feature page (/audio)
+│   ├── index.html                         # Legacy — kept for reference
+│   └── static/
+│       ├── css/
+│       │   ├── landing.css                # Landing page styles
+│       │   ├── style.css                  # Image page styles
+│       │   └── audio.css                  # Audio page styles
+│       └── js/
+│           ├── app.js                     # Frontend logic for image page
+│           └── audio.js                   # Frontend logic for audio page
+├── uploads/                               # Temporary image storage (gitignored)
+├── yolo26n.pt                             # Object detection model weights
+└── yolov8n-seg.pt                         # Segmentation model weights (auto-downloaded)
 ```
 
-## Architecture Overview
+## Architecture
 
-The app follows a simple end-to-end ML application flow:
+```
+Browser → FastAPI → feature module → model inference → JSON response → canvas overlay
+```
 
-1. The user uploads an image in the frontend.
-2. The frontend sends the image to a FastAPI route.
-3. The backend validates and decodes the image.
-4. A feature module runs model inference.
-5. The backend returns structured JSON results.
-6. The frontend draws predictions on top of the uploaded image.
+1. User uploads an image on the frontend.
+2. Frontend POSTs it to a FastAPI route (`/api/detect` or `/api/segment`).
+3. The route calls the relevant feature module (`detect()` or `segment()`).
+4. The module runs inference and returns structured JSON.
+5. The frontend draws bounding boxes or segmentation masks on a canvas overlay.
 
-This structure is useful for interviews because it demonstrates how machine learning systems connect to real product interfaces.
+Each feature is a self-contained module with a single function signature. Adding a new feature means adding a route file and a feature directory — nothing else needs to change.
 
 ## Getting Started
 
-### Prerequisites
+**Prerequisites:** Python 3.10+, and `ffmpeg` installed on your system (required by Whisper for audio decoding).
 
-- Python 3.10+
-
-### Setup
+Install ffmpeg if you don't have it:
+- **macOS:** `brew install ffmpeg`
+- **Ubuntu/Debian:** `sudo apt install ffmpeg`
+- **Windows:** download from [ffmpeg.org](https://ffmpeg.org/download.html)
 
 ```bash
 git clone https://github.com/juveb7/image_playground.git
@@ -104,166 +105,119 @@ pip install -r backend/requirements.txt
 python backend/app/main.py
 ```
 
-Then open your browser at [http://localhost:5000](http://localhost:5000).
+Open your browser at `http://localhost:8002`.
 
-## Usage
+On first run, models are downloaded automatically:
+- `yolov8n-seg.pt` — ~6 MB, downloaded by `ultralytics`
+- Whisper tiny — ~39 MB, downloaded to `~/.cache/whisper/`
 
-1. Open the web app.
-2. Upload an image.
-3. Select a feature such as object detection or segmentation.
-4. Inspect the visual output and result list.
+## API Reference
 
-## Team Roadmap
+### `POST /api/transcribe`
 
-The roadmap is designed around four phases so the team can learn, ship, and prepare strong interview narratives at the same time.
+Transcribes speech in an uploaded audio file using Whisper tiny.
 
-### Phase 1: Foundation and Alignment
+**Request:** `multipart/form-data` with a `file` field (MP3, WAV, M4A, OGG, FLAC).
 
-Goal: make the current codebase stable and ensure everyone understands the architecture.
+**Response:**
+```json
+{
+  "text": "Full transcript of the audio.",
+  "language": "en",
+  "segments": [
+    { "start": 0.0, "end": 2.5, "text": "Full transcript" }
+  ]
+}
+```
 
-Deliverables:
+### `POST /api/detect`
 
-- finalize README and project vision
-- agree on coding standards and branch workflow
-- make local setup consistent for all team members
-- confirm backend routes and frontend flows work end to end
-- assign primary ownership areas for each teammate
+Runs object detection on an uploaded image.
 
-Interview value:
+**Request:** `multipart/form-data` with a `file` field (JPEG, PNG, or WebP).
 
-- explain the overall system design
-- describe team collaboration and code organization choices
+**Response:**
+```json
+{
+  "detections": [
+    {
+      "label": "person",
+      "confidence": 0.91,
+      "bbox": { "x": 10, "y": 20, "width": 100, "height": 200 }
+    }
+  ],
+  "image_width": 1280,
+  "image_height": 720
+}
+```
 
-### Phase 2: Core Feature Completion
+### `POST /api/segment`
 
-Goal: implement the first working CV features cleanly.
+Runs instance segmentation on an uploaded image.
 
-Deliverables:
+**Request:** `multipart/form-data` with a `file` field (JPEG, PNG, or WebP).
 
-- implement object detection inference
-- implement image segmentation inference
-- define consistent JSON output contracts
-- add input validation and error handling
-- test model loading and response behavior
+**Response:**
+```json
+{
+  "segments": [
+    {
+      "label": "cat",
+      "confidence": 0.87,
+      "bbox": { "x": 10, "y": 20, "width": 100, "height": 200 },
+      "mask": [[x1, y1], [x2, y2], "..."]
+    }
+  ],
+  "image_width": 640,
+  "image_height": 480
+}
+```
 
-Interview value:
+`mask` is a polygon contour in original image pixels. The frontend closes the path automatically.
 
-- explain model selection tradeoffs
-- discuss inference pipelines and prediction formatting
-- talk about quality, latency, and engineering constraints
+## Adding a New Feature
 
-### Phase 3: Product Quality and Engineering Depth
+1. Create `backend/app/features/<name>/<name>.py` with a single entry-point function.
+2. Create `backend/app/routes/<name>.py` with a FastAPI router and one POST endpoint.
+3. Register the router in `backend/app/main.py`.
+4. Add frontend handling in `app.js` (a new `run<Name>()` function and a `draw<Name>()` function).
+5. Add a tab button in `image.html` and wire it to the new feature string.
 
-Goal: make the app look and behave like a serious ML portfolio project.
+## Roadmap
 
-Deliverables:
+### Phase 1 — Foundation ✅
+- Project structure, FastAPI backend, frontend upload flow
+- Object detection end-to-end
+- Segmentation end-to-end
+- Multi-category landing page
+- Audio transcription with Whisper (custom player: play/pause, seek, segment timestamps)
 
-- improve frontend polish and UX
-- add better loading states and error messages
-- introduce basic test coverage
-- document API behavior and assumptions
-- improve performance where needed
-- support cleaner configuration for ports, models, and environments
+### Phase 2 — Polish & Testing
+- Unit tests for all API routes (`/api/detect`, `/api/segment`, `/api/transcribe`)
+- Unit tests for feature modules (`detector.py`, `segmenter.py`, `transcriber.py`)
+- Integration tests with sample fixtures (image, audio)
+- Improve error messages and loading states on the frontend
+- Performance improvements (async inference, model caching)
+- Image classification tab (easy win — YOLO supports it natively)
 
-Interview value:
+### Phase 3 — New Modalities
+- **Audio** — audio classification (environmental sounds, music genre)
+- **Text** — sentiment analysis and NER with a small HuggingFace model; summarization
+- **Video** — object tracking with YOLOv8 across frames; action recognition
+- Unit tests for each new feature module as it ships
 
-- discuss production-readiness considerations
-- show that the team thought about maintainability and user experience
-- demonstrate debugging and software engineering maturity
+### Phase 4 — Production Quality
+- Cloud deployment (render or HuggingFace Spaces)
+- Model versioning and benchmarking
+- Async/background processing for heavier models (video, large audio)
+- Observability and request logging
 
-### Phase 4: Expansion and Differentiation
+## Interview Framing
 
-Goal: grow the app into a stronger portfolio and learning platform.
+> We built a modular, multi-modal AI playground to practice full-stack ML engineering. The frontend handles upload, feature selection, and result visualization. The FastAPI backend exposes pluggable inference routes — each feature is a self-contained module so new capabilities can be added without touching existing code. We used the project to learn how to structure production-style ML applications, collaborate as a team, and build concrete examples for interviews.
 
-Possible feature additions:
-
-- image classification
-- OCR
-- image captioning
-- edge detection
-- depth estimation
-- model comparison mode
-- upload history or saved results
-
-Interview value:
-
-- shows extensible system design
-- creates stronger project depth for resume and portfolio discussions
-
-## Suggested Team Ownership
-
-The team should still collaborate across the stack, but assigning primary areas will help execution.
-
-- Abdoul: model experimentation, feature implementation, evaluation, technical writeups
-- Juve: backend integration, API contracts, application structure, infra cleanup
-- Gio: frontend UX, visualization, user flow, presentation polish
-
-This is only a starting point. Everyone should still understand the full pipeline and be able to explain it.
-
-## Working Style
-
-To get the most value from the project, the team should work in a way that supports both learning and shipping:
-
-- keep each feature small and demoable
-- use issues or a lightweight task board
-- create short-lived branches for focused work
-- review each other’s code
-- document why technical decisions were made
-- track interview stories while building
-
-## Recommended Milestones
-
-### Milestone 1: MVP Demo
-
-- app runs locally for all teammates
-- object detection works end to end
-- frontend correctly renders boxes and labels
-- README clearly explains the project
-
-### Milestone 2: Multi-Feature Demo
-
-- segmentation works end to end
-- feature tabs are stable
-- error handling is improved
-- sample demo images are ready
-
-### Milestone 3: Portfolio Quality
-
-- tests added for key API behaviors
-- UX improvements completed
-- project is polished enough for GitHub and interviews
-- each teammate can explain their contributions clearly
-
-### Milestone 4: Advanced Extension
-
-- one differentiated feature added beyond the basics
-- architecture remains modular
-- project story is strong enough for resumes, interviews, and demos
-
-## Near-Term Task Breakdown
-
-These are the highest-value next steps for the team:
-
-1. Implement `detect()` in `backend/app/features/object_detection/detector.py`.
-2. Implement `segment()` in `backend/app/features/segmentation/segmenter.py`.
-3. Add model dependencies and document setup clearly.
-4. Improve frontend messaging for loading and failures.
-5. Add API and feature tests.
-6. Add one polished demo workflow for interviews.
-
-## How To Talk About This Project In Interviews
-
-This project is strongest when described as an end-to-end ML engineering system, not just a vision demo.
-
-Good framing:
-
-> We built a modular computer vision playground to practice full-stack ML engineering. The frontend handles image upload and visualization, the FastAPI backend exposes feature-specific inference routes, and each CV capability is implemented as a pluggable backend module. We used the project to learn how to structure production-style ML applications, collaborate as a team, and build strong examples for interviews.
-
-## Future Enhancements
-
-- model versioning
-- benchmarking different vision backbones
-- async/background processing for heavier models
-- cloud deployment
-- authentication and saved user sessions
-- observability and request logging
+Strong talking points:
+- **System design:** modular inference pipeline, clean separation of frontend/backend/model layers
+- **Model selection:** why YOLOv8n for speed vs. accuracy tradeoffs
+- **Engineering depth:** JSON contracts between backend and frontend, canvas-based visualization, error handling
+- **Extensibility:** how the architecture supports adding video, audio, and text without refactoring

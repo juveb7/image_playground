@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audio — AI Playground</title>
+  <link rel="stylesheet" href="/static/css/audio.css?v=1" />
+</head>
+<body>
+  <header>
+    <a href="/" class="back-link">&larr; All categories</a>
+    <h1>Audio</h1>
+    <p class="subtitle">Upload an audio file to get an AI-powered transcript</p>
+  </header>
+
+  <main>
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Upload audio file">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5" width="48" height="48">
+        <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+        <path stroke-linecap="round" d="M19 10a7 7 0 01-14 0"/>
+        <line x1="12" y1="17" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+      <p>Drag &amp; drop an audio file here, or <span class="link">click to browse</span></p>
+      <p class="hint">MP3, WAV, M4A, OGG, FLAC</p>
+      <input type="file" id="file-input" accept="audio/*" hidden />
+    </div>
+
+    <section id="result-section" hidden>
+
+      <!-- Audio player -->
+      <div id="player-card">
+        <div id="player-header">
+          <span id="file-name"></span>
+          <button id="clear-btn" aria-label="Clear audio">&#x2715; Clear</button>
+        </div>
+
+        <audio id="audio-el" preload="metadata"></audio>
+
+        <div id="player-controls">
+          <button id="play-btn" aria-label="Play">
+            <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                 fill="currentColor" width="20" height="20">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                 fill="currentColor" width="20" height="20" hidden>
+              <rect x="6" y="4" width="4" height="16"/>
+              <rect x="14" y="4" width="4" height="16"/>
+            </svg>
+          </button>
+
+          <div id="progress-track" role="slider" aria-label="Seek" tabindex="0">
+            <div id="progress-fill"></div>
+            <div id="progress-thumb"></div>
+          </div>
+
+          <span id="time-display">0:00 / 0:00</span>
+        </div>
+      </div>
+
+      <!-- Transcript -->
+      <div id="transcript-card">
+        <div id="transcript-header">
+          <h2>Transcript</h2>
+          <span id="lang-badge"></span>
+        </div>
+        <p id="transcript-text"></p>
+        <ul id="segments-list"></ul>
+      </div>
+
+    </section>
+
+    <p id="status-msg" aria-live="polite"></p>
+  </main>
+
+  <script src="/static/js/audio.js?v=1"></script>
+</body>
+</html>

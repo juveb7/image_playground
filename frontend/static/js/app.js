@@ -11,6 +11,10 @@ const countBadge   = document.getElementById("detection-count");
 const statusMsg    = document.getElementById("status-msg");
 const resultsLabel = document.getElementById("results-label");
 const tabs         = document.querySelectorAll(".tab");
+const clearBtn     = document.getElementById("clear-btn");
+
+// ── Persisted file ───────────────────────────────────────────────────────────
+let currentFile = null;
 
 // Color palette — cycles if there are more results than colors
 const COLORS = [
@@ -30,9 +34,13 @@ tabs.forEach((tab) => {
     tab.classList.add("active");
     tab.setAttribute("aria-selected", "true");
     currentFeature = tab.dataset.feature;
-    clearResults();
-    resultSec.setAttribute("hidden", "");
-    setStatus("");
+    if (currentFile) {
+      handleFile(currentFile);
+    } else {
+      clearResults();
+      resultSec.setAttribute("hidden", "");
+      setStatus("");
+    }
   });
 });
 
@@ -60,6 +68,16 @@ fileInput.addEventListener("change", () => {
   if (fileInput.files[0]) handleFile(fileInput.files[0]);
 });
 
+// ── Clear button ─────────────────────────────────────────────────────────────
+clearBtn.addEventListener("click", () => {
+  currentFile = null;
+  preview.src = "";
+  clearResults();
+  resultSec.setAttribute("hidden", "");
+  fileInput.value = "";
+  setStatus("");
+});
+
 // ── Core flow ─────────────────────────────────────────────────────────────────
 async function handleFile(file) {
   if (!file.type.startsWith("image/")) {
@@ -67,9 +85,12 @@ async function handleFile(file) {
     return;
   }
 
-  const objectUrl = URL.createObjectURL(file);
-  preview.src = objectUrl;
-  preview.onload = () => URL.revokeObjectURL(objectUrl);
+  if (file !== currentFile) {
+    currentFile = file;
+    const objectUrl = URL.createObjectURL(file);
+    preview.src = objectUrl;
+    preview.onload = () => URL.revokeObjectURL(objectUrl);
+  }
 
   clearResults();
   resultSec.removeAttribute("hidden");

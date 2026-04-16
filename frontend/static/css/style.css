@@ -1,5 +1,6 @@
 /* ── Reset & base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
 
 body {
   font-family: system-ui, -apple-system, sans-serif;
@@ -15,6 +16,15 @@ body {
 header { text-align: center; margin-bottom: 2rem; }
 h1 { font-size: 2rem; font-weight: 700; }
 .subtitle { color: #6e6e73; margin-top: 0.25rem; }
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: #0071e3;
+  text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
 
 /* ── Feature tabs ── */
 #feature-tabs {
@@ -134,6 +144,23 @@ h1 { font-size: 2rem; font-weight: 700; }
 }
 .det-label { font-weight: 500; }
 .det-confidence { color: #6e6e73; font-size: 0.8rem; }
+
+/* ── Clear button ── */
+#clear-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#clear-btn:hover { background: rgba(0, 0, 0, 0.75); }
 
 /* ── Status ── */
 #status-msg {

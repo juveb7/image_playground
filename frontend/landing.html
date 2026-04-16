@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Playground</title>
+  <link rel="stylesheet" href="/static/css/landing.css?v=1" />
+</head>
+<body>
+  <header>
+    <h1>AI Playground</h1>
+    <p class="subtitle">Pick a modality to get started</p>
+  </header>
+
+  <main>
+    <div class="card-grid">
+
+      <!-- Image — active -->
+      <a href="/image" class="card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5" width="40" height="40">
+            <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <h2>Image</h2>
+        <p>Analyze and understand images using computer vision models.</p>
+        <ul class="feature-list">
+          <li>Object Detection</li>
+          <li>Segmentation</li>
+        </ul>
+        <span class="card-cta">Explore &rarr;</span>
+      </a>
+
+      <!-- Video — coming soon -->
+      <div class="card card--soon">
+        <span class="badge">Coming Soon</span>
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5" width="40" height="40">
+            <rect x="2" y="5" width="15" height="14" rx="2"/>
+            <polygon points="22 7 17 12 22 17 22 7"/>
+          </svg>
+        </div>
+        <h2>Video</h2>
+        <p>Process video streams to detect motion, objects, and actions over time.</p>
+        <ul class="feature-list">
+          <li>Object Tracking</li>
+          <li>Action Recognition</li>
+        </ul>
+      </div>
+
+      <!-- Audio — active -->
+      <a href="/audio" class="card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5" width="40" height="40">
+            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+            <path stroke-linecap="round" d="M19 10a7 7 0 01-14 0"/>
+            <line x1="12" y1="17" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </div>
+        <h2>Audio</h2>
+        <p>Transcribe speech and classify sounds using state-of-the-art audio models.</p>
+        <ul class="feature-list">
+          <li>Speech-to-Text</li>
+          <li>Audio Classification</li>
+        </ul>
+        <span class="card-cta">Explore &rarr;</span>
+      </a>
+
+      <!-- Text — coming soon -->
+      <div class="card card--soon">
+        <span class="badge">Coming Soon</span>
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5" width="40" height="40">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="8" y1="13" x2="16" y2="13"/>
+            <line x1="8" y1="17" x2="13" y2="17"/>
+          </svg>
+        </div>
+        <h2>Text</h2>
+        <p>Understand and extract meaning from text using NLP models.</p>
+        <ul class="feature-list">
+          <li>Sentiment Analysis</li>
+          <li>Named Entity Recognition</li>
+          <li>Summarization</li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>
